@@ -1,0 +1,84 @@
+@import 'tailwindcss';
+@import 'leaflet/dist/leaflet.css';
+
+@theme {
+  /* Signature Brand Palette */
+  --color-midnight-ink: #070B14;
+  --color-deep-ocean: #0B1424;
+  --color-midnight-blue: #101D32;
+  --color-electric-turquoise: #42E8D8;
+  --color-ice-cyan: #8AF7EF;
+  --color-sunset-amber: #FFB86B;
+  --color-soft-white: #F5F7FB;
+  --color-muted-silver: #9BA9BD;
+
+  /* Preserved Navy & Teal Scales */
+  --color-navy-950: #070B14;
+  --color-navy-900: #0B1424;
+  --color-navy-800: #101D32;
+  --color-navy-700: #1C2D4A;
+  --color-navy-600: #2E466F;
+  --color-navy-500: #4B6B9E;
+  --color-navy-400: #9BA9BD;
+  --color-navy-300: #CBD5E1;
+  --color-navy-200: #E2E8F0;
+  --color-navy-100: #F1F5F9;
+
+  --color-teal-600: #25C2B4;
+  --color-teal-500: #42E8D8;
+  --color-teal-400: #8AF7EF;
+  --color-teal-300: #B7FAF5;
+
+  --color-coral-500: #FFB86B;
+  --color-coral-400: #FFCA8A;
+
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+  --font-editorial: 'Playfair Display', Georgia, serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: #070B14;
+    color: #F5F7FB;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #070B14;
+    color: #F5F7FB;
+    overflow-x: hidden;
+  }
+}
+
+/* Cartographic Grid & Line Textures */
+.carto-grid {
+  background-image: 
+    linear-gradient(to right, rgba(66, 232, 216, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(66, 232, 216, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.carto-lines {
+  background-image: radial-gradient(circle at 50% 50%, rgba(66, 232, 216, 0.08) 0%, transparent 60%);
+}
+
+/* Glassmorphism Classes */
+.glass-panel {
+  background: rgba(11, 20, 36, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-glow {
+  background: rgba(16, 29, 50, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(66, 232, 216, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(66, 232, 216, 0.05);
+}
