@@ -162,11 +162,17 @@ export default function LoginPage() {
 
       {/* Brand Header */}
       <div className="sm:mx-auto sm:w-full sm:max-w-xl relative z-10 px-4">
-        <Link to="/" className="flex items-center justify-center gap-2 mb-6 group">
-          <div className="p-2.5 rounded-xl bg-teal-500/10 border border-teal-500/20 group-hover:bg-teal-500/20 transition-colors">
-            <Compass className="w-7 h-7 text-teal-400" />
+        <Link to="/" className="flex flex-col items-center justify-center gap-2 mb-6 group">
+          <img
+            src="/images/travelmind-logo.png"
+            alt="TRAVELMIND AI official travel logo"
+            className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_16px_rgba(255,184,107,0.35)]"
+          />
+          <div className="flex items-center gap-1.5 mt-1">
+            <span className="text-2xl font-black text-white tracking-wider font-display">
+              TRAVELMIND <span className="text-teal-400">AI</span>
+            </span>
           </div>
-          <span className="text-2xl font-bold text-white tracking-tight">TravelMind AI</span>
         </Link>
         <h2 className="text-center text-3xl font-extrabold text-white">
           Sign In to Your Adventure

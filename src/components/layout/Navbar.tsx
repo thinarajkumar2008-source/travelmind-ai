@@ -34,15 +34,18 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          {/* Logo & Cartographic Coordinates Tag */}
+          {/* Logo & Cartographic Brand */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="relative p-2.5 rounded-2xl bg-white/[0.05] border border-white/10 group-hover:border-[#42E8D8]/50 transition-all duration-300 shadow-md">
-              <Compass className="w-5 h-5 text-[#42E8D8] group-hover:rotate-45 transition-transform duration-500" />
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-[#42E8D8] animate-ping" />
+            <div className="relative flex items-center justify-center">
+              <img
+                src="/images/travelmind-logo.png"
+                alt="TRAVELMIND AI official travel logo"
+                className="h-12 md:h-14 w-auto object-contain transition-all duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_14px_rgba(255,184,107,0.35)]"
+              />
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
-                <span className="text-lg font-black tracking-wider text-[#F5F7FB] font-display">
+                <span className="text-lg md:text-xl font-black tracking-wider text-[#F5F7FB] font-display">
                   TRAVELMIND
                 </span>
                 <span className="px-1.5 py-0.5 rounded-md bg-[#42E8D8]/15 border border-[#42E8D8]/30 text-[10px] font-extrabold tracking-widest text-[#42E8D8]">
@@ -143,6 +146,21 @@ export default function Navbar() {
             className="lg:hidden bg-[#070B14]/98 border-t border-white/10 backdrop-blur-2xl shadow-2xl"
           >
             <div className="px-5 py-5 space-y-1.5">
+              <div className="flex items-center gap-3 pb-3 mb-2 border-b border-white/10">
+                <img
+                  src="/images/travelmind-logo.png"
+                  alt="TRAVELMIND AI official travel logo"
+                  className="h-10 w-auto object-contain"
+                />
+                <div className="flex flex-col">
+                  <span className="text-sm font-black tracking-wider text-[#F5F7FB] font-display">
+                    TRAVELMIND <span className="text-[#42E8D8]">AI</span>
+                  </span>
+                  <span className="text-[9px] text-[#9BA9BD] font-mono tracking-wider uppercase">
+                    Cinematic Intelligence
+                  </span>
+                </div>
+              </div>
               {NAV_LINKS.map((link) => {
                 const isInternalRoute = link.href.startsWith('/') && !link.href.includes('#')
                 if (isInternalRoute) {

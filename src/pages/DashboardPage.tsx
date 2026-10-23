@@ -128,11 +128,20 @@ export default function DashboardPage() {
         sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
       }`}>
         <div className="p-6 flex items-center justify-between border-b border-white/10">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-teal-500/10 border border-teal-500/20">
-              <Compass className="w-5 h-5 text-teal-400" />
+          <Link to="/" className="flex items-center gap-3 group">
+            <img
+              src="/images/travelmind-logo.png"
+              alt="TRAVELMIND AI official travel logo"
+              className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-[0_0_10px_rgba(255,184,107,0.3)]"
+            />
+            <div className="flex flex-col">
+              <span className="font-black text-base tracking-wider text-white font-display">
+                TRAVELMIND <span className="text-teal-400">AI</span>
+              </span>
+              <span className="text-[9px] text-navy-400 font-mono tracking-wider uppercase">
+                Dashboard
+              </span>
             </div>
-            <span className="font-bold text-lg tracking-tight">TravelMind AI</span>
           </Link>
           <button 
             onClick={() => setSidebarOpen(false)}
@@ -187,14 +196,21 @@ export default function DashboardPage() {
       <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
         {/* Top Navbar */}
         <header className="h-20 border-b border-white/10 px-6 sm:px-8 flex items-center justify-between bg-navy-950/80 backdrop-blur sticky top-0 z-30">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
               className="lg:hidden p-2 rounded-xl bg-white/5 text-navy-300 hover:text-white"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <h1 className="text-xl font-bold">Traveler Dashboard</h1>
+            <Link to="/" className="lg:hidden flex items-center">
+              <img
+                src="/images/travelmind-logo.png"
+                alt="TRAVELMIND AI official travel logo"
+                className="h-8 w-auto object-contain"
+              />
+            </Link>
+            <h1 className="text-lg sm:text-xl font-bold">Traveler Dashboard</h1>
           </div>
 
           <div className="flex items-center gap-3">

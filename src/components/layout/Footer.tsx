@@ -34,13 +34,20 @@ export default function Footer() {
         <div className="py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="p-2 rounded-xl bg-white/[0.05] border border-white/10 group-hover:border-[#42E8D8]/50 transition-colors">
-                <Compass className="w-5 h-5 text-[#42E8D8]" />
+            <Link to="/" className="flex items-center gap-3 group">
+              <img
+                src="/images/travelmind-logo.png"
+                alt="TRAVELMIND AI official travel logo"
+                className="h-11 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_10px_rgba(255,184,107,0.3)]"
+              />
+              <div className="flex flex-col">
+                <span className="text-lg font-black tracking-wider text-[#F5F7FB] font-display">
+                  TRAVELMIND <span className="text-[#42E8D8]">AI</span>
+                </span>
+                <span className="text-[10px] text-[#9BA9BD] font-mono tracking-wider uppercase">
+                  Cinematic Intelligence
+                </span>
               </div>
-              <span className="text-xl font-black tracking-wider text-[#F5F7FB] font-display">
-                TRAVELMIND <span className="text-[#42E8D8]">AI</span>
-              </span>
             </Link>
 
             <p className="text-[#9BA9BD] text-xs sm:text-sm leading-relaxed max-w-sm">

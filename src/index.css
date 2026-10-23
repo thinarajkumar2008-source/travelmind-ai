@@ -82,3 +82,11 @@
   border: 1px solid rgba(66, 232, 216, 0.2);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(66, 232, 216, 0.05);
 }
+
+/* Brand Logo Proportional Utility */
+.brand-logo {
+  height: 56px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}

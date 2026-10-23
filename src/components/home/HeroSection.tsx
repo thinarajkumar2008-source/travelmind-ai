@@ -160,9 +160,13 @@ export default function HeroSection() {
             transition={{ duration: 0.9, ease: 'easeOut' }}
             className="lg:col-span-7 space-y-6"
           >
-            {/* Minimal Sub-Badge */}
-            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0B1424]/80 border border-[#42E8D8]/30 shadow-lg shadow-[#42E8D8]/5 backdrop-blur-xl">
-              <span className="w-2 h-2 rounded-full bg-[#42E8D8]" />
+            {/* Minimal Sub-Badge with Official Logo */}
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#0B1424]/80 border border-[#42E8D8]/30 shadow-lg shadow-[#42E8D8]/5 backdrop-blur-xl">
+              <img
+                src="/images/travelmind-logo.png"
+                alt="TRAVELMIND AI official travel logo"
+                className="h-5 w-auto object-contain drop-shadow"
+              />
               <span className="text-xs font-semibold text-[#8AF7EF] tracking-wider uppercase font-mono">
                 Multimodal Travel Intelligence
               </span>

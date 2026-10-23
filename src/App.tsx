@@ -29,8 +29,16 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-navy-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-navy-950 text-white flex flex-col items-center justify-center gap-4">
+        <div className="relative flex items-center justify-center">
+          <img
+            src="/images/travelmind-logo.png"
+            alt="TRAVELMIND AI official travel logo"
+            className="h-16 w-auto object-contain animate-pulse"
+          />
+        </div>
         <div className="w-8 h-8 rounded-full border-2 border-teal-500 border-t-transparent animate-spin" />
+        <span className="text-xs text-navy-400 font-mono tracking-widest uppercase">Loading TRAVELMIND AI...</span>
       </div>
     )
   }
