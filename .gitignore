@@ -33,3 +33,8 @@ backend/.env.*
 __pycache__
 *.pyc
 .pytest_cache
+
+# Databases
+*.sqlite
+*.sqlite3
+*.db

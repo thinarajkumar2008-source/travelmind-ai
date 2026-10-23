@@ -22,6 +22,8 @@ import {
 } from 'lucide-react'
 import { api } from '../lib/api'
 import { SUPPORTED_VIDEO_FORMATS, MAX_FILE_SIZE_MB, MAX_FILE_SIZE_BYTES, POPULAR_DESTINATIONS } from '../lib/constants'
+import LocationSearchInput from '../components/geo/LocationSearchInput'
+import { GeoLocation } from '../services/geoService'
 
 export default function VideoAnalyzePage() {
   const location = useLocation()
@@ -283,23 +285,29 @@ export default function VideoAnalyzePage() {
             </div>
           )}
 
-          {/* Mode 3: Manual Search Fallback */}
+          {/* Mode 3: Manual Search Fallback with 100+ Countries Database */}
           {activeTab === 'manual' && (
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-mono text-[#9BA9BD] uppercase tracking-wider mb-2">
-                  Destination Name or Landmark
+                  Search Global Destinations, Cities & Villages (100+ Countries)
                 </label>
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#42E8D8]" />
-                  <input
-                    type="text"
-                    value={manualDestination}
-                    onChange={(e) => setManualDestination(e.target.value)}
-                    placeholder="e.g. Munnar, Bali, Kyoto, Jaipur, Ooty..."
-                    className="w-full pl-12 pr-4 py-4 bg-[#070B14] border border-white/10 rounded-2xl text-[#F5F7FB] placeholder-[#9BA9BD]/50 focus:outline-none focus:border-[#42E8D8] text-sm transition-all"
-                  />
-                </div>
+                <LocationSearchInput
+                  placeholder="Search any destination worldwide (e.g. Kyoto, Munnar, Zermatt, Hallstatt)..."
+                  onSelect={(loc: GeoLocation) => {
+                    setManualDestination(loc.name)
+                    // Check if known curated destination
+                    const match = POPULAR_DESTINATIONS.find(
+                      d => d.name.toLowerCase() === loc.name.toLowerCase() ||
+                           loc.name.toLowerCase().includes(d.name.toLowerCase())
+                    )
+                    if (match) {
+                      navigate(`/destination/${match.id}`)
+                    } else {
+                      navigate('/explore-map')
+                    }
+                  }}
+                />
               </div>
 
               {filteredSuggestions.length > 0 && (
@@ -322,7 +330,7 @@ export default function VideoAnalyzePage() {
               )}
 
               <p className="text-xs text-[#9BA9BD]">
-                If your video has insufficient cues or you know the destination already, access the complete travel guide and map directly at ₹0 cost.
+                Search settlements, towns, and tourist spots across 100+ countries with zero cost. Powered by GeoNames (CC BY 4.0) and OpenStreetMap.
               </p>
             </div>
           )}

@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom'
 import Navbar from '../components/layout/Navbar'
 import Footer from '../components/layout/Footer'
 import TravelMap, { MapPlace, MarkerCategory } from '../components/map/TravelMap'
+import CountrySelect from '../components/geo/CountrySelect'
+import LocationSearchInput from '../components/geo/LocationSearchInput'
+import DataAttributionModal from '../components/geo/DataAttributionModal'
+import { Country, GeoLocation, geoService } from '../services/geoService'
 import { POPULAR_DESTINATIONS, DestinationItem } from '../lib/constants'
 import { MOCK_HOTELS, MOCK_RESTAURANTS, MOCK_ATTRACTIONS } from '../lib/mockData'
 import { useAuth } from '../context/AuthContext'
@@ -23,12 +27,15 @@ import {
   Info,
   CheckCircle2,
   Globe2,
-  Layers
+  Layers,
+  Database
 } from 'lucide-react'
 
 export default function ExploreMapPage() {
   const { user } = useAuth()
   const [selectedDestination, setSelectedDestination] = useState<DestinationItem>(POPULAR_DESTINATIONS[0])
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
+  const [showAttributionModal, setShowAttributionModal] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState<MarkerCategory | 'all'>('all')
   const [selectedPlace, setSelectedPlace] = useState<MapPlace | null>(null)
@@ -40,6 +47,67 @@ export default function ExploreMapPage() {
   const showToast = (msg: string) => {
     setToastMessage(msg)
     setTimeout(() => setToastMessage(null), 3000)
+  }
+
+  const handleCountrySelect = async (country: Country) => {
+    setSelectedCountry(country)
+    if (country.latitude && country.longitude) {
+      const countryPlace: MapPlace = {
+        id: `country-${country.id}`,
+        name: country.name,
+        category: 'destination',
+        subCategory: country.continent,
+        latitude: country.latitude,
+        longitude: country.longitude,
+        address: `${country.capital ? country.capital + ', ' : ''}${country.name}`,
+        description: `Capital: ${country.capital || 'N/A'} • Currency: ${country.currency_code || 'N/A'} • Region: ${country.region || country.continent}`,
+        image: 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=80',
+        rating: 4.9,
+      }
+      setCustomNominatimPlaces(prev => [countryPlace, ...prev.filter(p => p.id !== countryPlace.id)])
+      setSelectedPlace(countryPlace)
+      showToast(`Exploring ${country.flag_emoji || '🌐'} ${country.name}`)
+
+      // Fetch sample settlements in this country to show on map
+      try {
+        const res = await geoService.searchLocations('', { countryCode: country.id, limit: 10 })
+        if (res.results && res.results.length > 0) {
+          const settlementPlaces: MapPlace[] = res.results.map(loc => ({
+            id: `loc-${loc.id}`,
+            name: loc.name,
+            category: 'destination',
+            subCategory: loc.location_type.toUpperCase(),
+            latitude: loc.latitude,
+            longitude: loc.longitude,
+            address: `${loc.region_name ? loc.region_name + ', ' : ''}${country.name}`,
+            description: `${loc.location_type.toUpperCase()}${loc.population ? ` • Pop: ${loc.population.toLocaleString()}` : ''} • Source: ${loc.data_source}`,
+            image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&q=80',
+            rating: 4.7,
+          }))
+          setCustomNominatimPlaces(prev => [...settlementPlaces, ...prev])
+        }
+      } catch (err) {
+        console.warn('Failed to fetch country settlements:', err)
+      }
+    }
+  }
+
+  const handleLocationSelect = (loc: GeoLocation) => {
+    const newPlace: MapPlace = {
+      id: `loc-${loc.id}`,
+      name: loc.name,
+      category: 'destination',
+      subCategory: loc.location_type.toUpperCase(),
+      latitude: loc.latitude,
+      longitude: loc.longitude,
+      address: `${loc.region_name ? loc.region_name + ', ' : ''}${loc.country_name || loc.country_id}`,
+      description: `Settlement Type: ${loc.location_type}${loc.population ? ' • Population: ' + loc.population.toLocaleString() : ''}. Source: ${loc.data_source}.`,
+      image: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=800&q=80',
+      rating: 4.8,
+    }
+    setCustomNominatimPlaces(prev => [newPlace, ...prev.filter(p => p.id !== newPlace.id)])
+    setSelectedPlace(newPlace)
+    showToast(`Navigated to ${loc.name} (${loc.country_name || loc.country_id})`)
   }
 
   const allMapPlaces = useMemo(() => {
@@ -286,7 +354,29 @@ export default function ExploreMapPage() {
           ))}
         </div>
 
-        {/* Search & Category Filter Toolbar */}
+        {/* Global Discovery Controls: Country Selector + Location Autocomplete */}
+        <div className="grid sm:grid-cols-12 gap-3 mb-4">
+          <div className="sm:col-span-5">
+            <CountrySelect
+              selectedCountry={selectedCountry}
+              onSelect={handleCountrySelect}
+              placeholder="🌍 Select Country (100+ Worldwide)"
+            />
+          </div>
+          <div className="sm:col-span-7">
+            <LocationSearchInput
+              countryId={selectedCountry?.id}
+              placeholder={
+                selectedCountry
+                  ? `Search cities, towns, villages in ${selectedCountry.name}...`
+                  : 'Search cities, towns, villages, settlements worldwide...'
+              }
+              onSelect={handleLocationSelect}
+            />
+          </div>
+        </div>
+
+        {/* Category & OSM Geocode Toolbar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 p-4 rounded-2xl glass-panel mb-6">
           <form onSubmit={handleFreeOSMSearch} className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9BA9BD]" />
@@ -294,7 +384,7 @@ export default function ExploreMapPage() {
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search places or geocode any city via OpenStreetMap..."
+              placeholder="Quick filter places or search live OpenStreetMap..."
               className="w-full pl-11 pr-24 py-2.5 rounded-xl bg-[#070B14] border border-white/10 text-[#F5F7FB] text-xs sm:text-sm placeholder-[#9BA9BD]/50 focus:outline-none focus:border-[#42E8D8] transition-all font-mono"
             />
             <button
@@ -442,12 +532,19 @@ export default function ExploreMapPage() {
               showDetailsPane={true}
             />
 
-            <div className="mt-3 flex items-center justify-between text-[11px] text-[#9BA9BD] font-mono px-2">
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-[#9BA9BD] font-mono px-2">
               <div className="flex items-center gap-1.5 text-[#42E8D8]">
                 <Info className="w-3.5 h-3.5" />
                 <span>Zero-Cost: Powered by Leaflet & OpenStreetMap contributors.</span>
               </div>
-              <span>No Google Maps API billing</span>
+              <button
+                type="button"
+                onClick={() => setShowAttributionModal(true)}
+                className="inline-flex items-center gap-1 text-[#FFB86B] hover:text-[#42E8D8] underline transition-colors cursor-pointer"
+              >
+                <Database className="w-3 h-3" />
+                <span>Open Data Credits (126 Countries)</span>
+              </button>
             </div>
           </div>
 
@@ -455,6 +552,11 @@ export default function ExploreMapPage() {
       </main>
 
       <Footer />
+
+      <DataAttributionModal
+        isOpen={showAttributionModal}
+        onClose={() => setShowAttributionModal(false)}
+      />
     </div>
   )
 }

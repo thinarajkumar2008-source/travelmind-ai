@@ -2,7 +2,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.config import settings
-from backend.routers import video, guide, places, planner, ai
+from backend.routers import video, guide, places, planner, ai, geo
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -42,6 +42,7 @@ app.include_router(guide.router, prefix=settings.API_V1_STR)
 app.include_router(places.router, prefix=settings.API_V1_STR)
 app.include_router(planner.router, prefix=settings.API_V1_STR)
 app.include_router(ai.router, prefix=settings.API_V1_STR)
+app.include_router(geo.router, prefix=settings.API_V1_STR)
 
 @app.get("/health", tags=["system"])
 async def health_check():
